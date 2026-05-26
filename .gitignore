@@ -1,0 +1,23 @@
+# Игнорируем всю папку .idea, кроме файлов стилей
+.idea/
+!.idea/codeStyles/
+
+# Исключаем специфичные для пользователей файлы конфигурации
+.idea/workspace.xml
+.idea/tasks.xml
+.idea/shelf/
+.idea/contentModel.xml
+
+# Игнорируем кэш, дампы и информацию о сборках
+.idea/caches/
+.idea/compiler.xml
+.idea/dictionaries/
+.idea/deployment.xml
+.idea/httpRequests/
+.idea/vcs.xml
+.idea/jsLibraryMappings.xml
+.idea/scratches/
+.idea/workspace-*.xml
+
+# Системные файлы macOS
+.DS_Store
