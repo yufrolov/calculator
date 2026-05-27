@@ -11,7 +11,7 @@ public class HistoryStorageService {
 
 
     public void addRecord(HistoryDto record) {
-        records.add(record);
+        if (record != null) records.add(record);
     }
 
     public List<HistoryDto> getAllRecords() {
