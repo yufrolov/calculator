@@ -13,6 +13,11 @@ public class HistoryDto {
         this.result = result;
         this.timestamp = LocalDateTime.now();
     }
+    public HistoryDto(String expression, double result, LocalDateTime timestamp) {
+        this.expression = expression;
+        this.result = result;
+        this.timestamp = timestamp;
+    }
 
     public String getExpression() {
         return expression;
