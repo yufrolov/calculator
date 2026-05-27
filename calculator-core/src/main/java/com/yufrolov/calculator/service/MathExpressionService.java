@@ -13,8 +13,14 @@ public class MathExpressionService {
         List<String> output = new ArrayList<>();
         Deque<Character> operators = new ArrayDeque<>();
 
+        boolean expectOperand = true;
+
         for (int i = 0; i < expression.length(); i++) {
             char c = expression.charAt(i);
+
+            if (Character.isWhitespace(c)) {
+                continue;
+            }
 
             if (Character.isDigit(c) || c == '.') {
                 StringBuilder number = new StringBuilder();
@@ -24,20 +30,53 @@ public class MathExpressionService {
                 }
                 output.add(number.toString());
                 i--;
-            } else if (c == '(') {
+                expectOperand = false;
+                continue;
+            }
+
+            if (c == '-' && expectOperand) {
+                StringBuilder number = new StringBuilder("-");
+                i++;
+                while (i < expression.length() && (Character.isDigit(expression.charAt(i)) || expression.charAt(i) == '.')) {
+                    number.append(expression.charAt(i));
+                    i++;
+                }
+                output.add(number.toString());
+                i--;
+                expectOperand = false;
+                continue;
+            }
+
+            if (c == '+' && expectOperand) {
+                continue;
+            }
+
+            if (c == '(') {
                 operators.push(c);
-            } else if (c == ')') {
+                expectOperand = true;
+                continue;
+            }
+
+            if (c == ')') {
                 while (!operators.isEmpty() && operators.peek() != '(') {
                     output.add(String.valueOf(operators.pop()));
                 }
                 operators.pop();
-            } else if (isOperator(c)) {
+                expectOperand = false;
+                continue;
+            }
+
+            if (isOperator(c)) {
                 while (!operators.isEmpty() && operators.peek() != '(' &&
                         getPrecedence(operators.peek()) >= getPrecedence(c)) {
                     output.add(String.valueOf(operators.pop()));
                 }
                 operators.push(c);
+                expectOperand = true;
+                continue;
             }
+
+            throw new MathEvaluationException("Unexpected character: " + c);
         }
 
         while (!operators.isEmpty()) {
@@ -58,6 +97,8 @@ public class MathExpressionService {
                 double a = stack.pop();
                 double result = applyOperator(a, b, token.charAt(0), validator);
                 stack.push(result);
+            } else {
+                throw new MathEvaluationException("Unknown token: " + token);
             }
         }
 
